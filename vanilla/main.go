@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"log"
 	"net/http"
 )
@@ -14,7 +15,17 @@ func main() {
 
 }
 
+type response struct {
+	Msg string `json:"message"`
+}
+
 func handelePing(w http.ResponseWriter, r *http.Request) {
+
+	res := response{Msg: "pong"}
+
+	json.NewEncoder(w).Encode(res)
+
+	w.WriteHeader(http.StatusOK)
 
 	log.Println("Request rescives")
 }
