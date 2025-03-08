@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -14,8 +15,25 @@ func main() {
 
 	router := gin.Default()
 	router.GET("/ping", handlePing)
+	router.GET("/hello/:name", handleHello)
 	router.Run(":8000")
 
+}
+
+func handleHello(c *gin.Context) {
+
+	name := c.Query("name")
+
+	var msg string
+	if name != ""{
+		msg = fmt.Sprintf("Welcome, %s", name)
+	}
+	else {
+		msg = "Welcome, user"
+	}
+
+
+	c.String(http.StatusOK, msg)
 }
 
 func handlePing(c *gin.Context) {
