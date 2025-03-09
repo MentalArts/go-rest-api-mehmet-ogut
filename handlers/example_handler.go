@@ -1,32 +1,14 @@
-package main
+package handlers
 
 import (
 	"fmt"
+	"mentalartsapi/dto"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
-type UserNaameChangeDTO struct {
-	UserID   uint   `json:"userID"`
-	UserName string `json:"userName"`
-}
-
-type Response struct {
-	Msg string `json:"message"`
-}
-
-func main() {
-
-	router := gin.Default()
-	router.GET("/ping", handlePing)
-	router.GET("/hello/:name", handleHello)
-	router.GET("/helloWithPayload", handlehelloWithPayload)
-	router.Run(":8000")
-
-}
-
-func handleHello(c *gin.Context) {
+func HandleHello(c *gin.Context) {
 
 	name := c.Query("name")
 
@@ -40,21 +22,16 @@ func handleHello(c *gin.Context) {
 	c.String(http.StatusOK, msg)
 }
 
-func handlePing(c *gin.Context) {
+func HandlePing(c *gin.Context) {
 
-	res := Response{Msg: "/pong"}
+	res := dto.Response{Msg: "/pong"}
 	c.JSON(http.StatusOK, res)
 }
 
-type DTO struct {
-	Name    string `json:"name"`
-	Surname string `json:"surname"`
-}
+func HandlehelloWithPayload(c *gin.Context) {
+	var user dto.User
 
-func handlehelloWithPayload(c *gin.Context) {
-	var dto DTO
-
-	err := c.BindJSON(&dto)
+	err := c.BindJSON(&user)
 	if err != nil {
 		c.String(http.StatusBadRequest, "bad Reqquest")
 
@@ -62,7 +39,7 @@ func handlehelloWithPayload(c *gin.Context) {
 	}
 
 	// validation
-	if dto.Name == "" {
+	if user.Name == "" {
 
 		c.String(http.StatusBadRequest, " empty is not accepted ")
 
@@ -70,7 +47,7 @@ func handlehelloWithPayload(c *gin.Context) {
 
 	}
 
-	msg := fmt.Sprintf("Welcome, %s %s", dto.Name, dto.Surname)
+	msg := fmt.Sprintf("Welcome, %s %s", user.Name, user.Surname)
 	c.String(http.StatusOK, msg)
 
 }
