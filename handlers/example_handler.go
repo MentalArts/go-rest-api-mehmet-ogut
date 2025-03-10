@@ -8,8 +8,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func HandleHello(c *gin.Context) {
+func HandlePing(c *gin.Context) {
+	res := dto.Response{Msg: "pong"}
+	c.JSON(http.StatusOK, res)
+}
 
+func HandleHello(c *gin.Context) {
 	name := c.Query("name")
 
 	var msg string
@@ -22,58 +26,22 @@ func HandleHello(c *gin.Context) {
 	c.String(http.StatusOK, msg)
 }
 
-func HandlePing(c *gin.Context) {
-
-	res := dto.Response{Msg: "/pong"}
-	c.JSON(http.StatusOK, res)
-}
-
-func HandlehelloWithPayload(c *gin.Context) {
+func HandleHelloWithPayload(c *gin.Context) {
+	// Binding (Get Payload from request)
 	var user dto.User
-
 	err := c.BindJSON(&user)
 	if err != nil {
-		c.String(http.StatusBadRequest, "bad Reqquest")
-
+		c.String(http.StatusBadRequest, "bad request")
 		return
 	}
 
-	// validation
+	// Validaton (Validate payload)
 	if user.Name == "" {
-
-		c.String(http.StatusBadRequest, " empty is not accepted ")
-
+		c.String(http.StatusBadRequest, "empty name is not accepted")
 		return
-
 	}
 
 	msg := fmt.Sprintf("Welcome, %s %s", user.Name, user.Surname)
 	c.String(http.StatusOK, msg)
 
 }
-
-// import (
-// 	"encoding/json"
-// 	"log"
-// 	"net/http"
-//)
-
-// func main() {
-
-// 	http.HandleFunc("GET /ping", handelePing)
-
-// 	log.Println("Server listining...")
-// 	log.Fatal(http.ListenAndServe(":8000", nil))
-
-// }
-
-// func handelePing(w http.ResponseWriter, r *http.Request) {
-
-// 	res := response{Msg: "pong"}
-
-// 	json.NewEncoder(w).Encode(res)
-
-// 	w.WriteHeader(http.StatusOK)
-
-// 	log.Println("Request rescives")
-// }
