@@ -8,10 +8,19 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+
+	"github.com/swaggo/files"
+	"github.com/swaggo/gin-swagger"
+
+	_ "mentalartsapi/docs"
 )
 
+// @title Bookstore API
+// @version 1.0
+// @description API for managing books, authors, and reviews
+// @host localhost:8000
+// @BasePath /api/v1
 func main() {
-
 	dsn := "host=localhost user=postgres password=123abc dbname=postgres port=5432 sslmode=disable"
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
@@ -24,6 +33,8 @@ func main() {
 	handlers.InitDB(db)
 
 	router := gin.Default()
+
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	router.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{"message": "pong"})

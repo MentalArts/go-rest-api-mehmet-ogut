@@ -1,9 +1,15 @@
 package models
 
-import "gorm.io/gorm"
+import (
+	"time"
+)
 
+// @Author Model
 type Author struct {
-	gorm.Model
-	Name  string `json:"name"`
-	Email string `json:"email" gorm:"unique"`
+	ID        uint       `gorm:"primaryKey" json:"id"`
+	Name      string     `json:"name"`
+	Email     string     `json:"email" gorm:"unique"`
+	CreatedAt time.Time  `json:"created_at"`
+	UpdatedAt time.Time  `json:"updated_at"`
+	DeletedAt *time.Time `json:"deleted_at,omitempty"`
 }
