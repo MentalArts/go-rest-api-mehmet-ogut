@@ -19,35 +19,31 @@ func main() {
 		log.Fatalf("Could not connect database: %v", err)
 	}
 
-	db.AutoMigrate(&models.Author{})
+	db.AutoMigrate(&models.Author{}, &models.Book{}, &models.Review{})
 
 	handlers.InitDB(db)
 
 	router := gin.Default()
 
-	router.GET("/ping", handlers.HandlePing)
-	router.GET("/hello", handlers.HandleHello)
-	router.GET("/helloWithPayload", handlers.HandleHelloWithPayload)
+	router.GET("/ping", func(c *gin.Context) {
+		c.JSON(200, gin.H{"message": "pong"})
+	})
 
-	router.POST("/author", handlers.CreateAuthor)
-	router.GET("/author", handlers.GetAllAuthors)
-	router.GET("/author/:id", handlers.GetAuthor)
-	router.PUT("/author/:id", handlers.UpdateAuthor)
-	router.DELETE("/author/:id", handlers.DeleteAuthor)
+	router.POST("/api/v1/authors", handlers.CreateAuthor)
+	router.GET("/api/v1/authors", handlers.GetAllAuthors)
+	router.GET("/api/v1/authors/:id", handlers.GetAuthor)
+	router.PUT("/api/v1/authors/:id", handlers.UpdateAuthor)
+	router.DELETE("/api/v1/authors/:id", handlers.DeleteAuthor)
 
+	router.POST("/api/v1/books", handlers.CreateBook)
+	router.GET("/api/v1/books", handlers.GetAllBooks)
+	router.GET("/api/v1/books/:id", handlers.GetBook)
+	router.PUT("/api/v1/books/:id", handlers.UpdateBook)
+	router.DELETE("/api/v1/books/:id", handlers.DeleteBook)
+
+	router.GET("/api/v1/books/:id/reviews", handlers.GetReviews)
+	router.POST("/api/v1/books/:id/reviews", handlers.CreateReview)
+
+	log.Println("🚀 Server listening on port 8000...")
 	router.Run(":8000")
 }
-
-// Vanilla implementation
-// func main() {
-// 	http.HandleFunc("GET /ping", handlePing)
-// 	log.Println("Server listening...")
-// 	log.Fatal(http.ListenAndServe(":8000", nil))
-// }
-
-// func handlePing(w http.ResponseWriter, r *http.Request) {
-// 	res := Response{Msg: "pong"}
-// 	json.NewEncoder(w).Encode(res)
-// 	w.WriteHeader(http.StatusOK)
-// 	log.Println("Request recieved")
-// }
