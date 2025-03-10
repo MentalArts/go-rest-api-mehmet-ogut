@@ -14,7 +14,7 @@ import (
 // @Produce json
 // @Param author body models.Author true "Author object"
 // @Success 201 {object} models.Author
-// @Router /api/v1/authors [post]
+// @Router /authors [post]
 func CreateAuthor(c *gin.Context) {
 	var author models.Author
 
@@ -36,7 +36,7 @@ func CreateAuthor(c *gin.Context) {
 // @Tags Authors
 // @Produce json
 // @Success 200 {array} models.Author
-// @Router /api/v1/authors [get]
+// @Router /authors [get]
 func GetAllAuthors(c *gin.Context) {
 	var authors []models.Author
 
@@ -54,7 +54,7 @@ func GetAllAuthors(c *gin.Context) {
 // @Produce json
 // @Param id path int true "Author ID"
 // @Success 200 {object} models.Author
-// @Router /api/v1/authors/{id} [get]
+// @Router /authors/{id} [get]
 func GetAuthor(c *gin.Context) {
 	id := c.Param("id")
 	var author models.Author
@@ -75,7 +75,7 @@ func GetAuthor(c *gin.Context) {
 // @Param id path int true "Author ID"
 // @Param author body models.Author true "Updated author object"
 // @Success 200 {object} models.Author
-// @Router /api/v1/authors/{id} [put]
+// @Router /authors/{id} [put]
 func UpdateAuthor(c *gin.Context) {
 	id := c.Param("id")
 	var author models.Author
@@ -101,9 +101,10 @@ func UpdateAuthor(c *gin.Context) {
 // @Summary Delete an author
 // @Description Delete an author by ID
 // @Tags Authors
+// @Produce json
 // @Param id path int true "Author ID"
 // @Success 200 {object} map[string]interface{}
-// @Router /api/v1/authors/{id} [delete]
+// @Router /authors/{id} [delete]
 func DeleteAuthor(c *gin.Context) {
 	id := c.Param("id")
 	var author models.Author

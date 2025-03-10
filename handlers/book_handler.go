@@ -14,7 +14,7 @@ import (
 // @Produce json
 // @Param book body models.Book true "Book object"
 // @Success 201 {object} models.Book
-// @Router /api/v1/books [post]
+// @Router /books [post]
 func CreateBook(c *gin.Context) {
 	var book models.Book
 
@@ -36,7 +36,7 @@ func CreateBook(c *gin.Context) {
 // @Tags Books
 // @Produce json
 // @Success 200 {array} models.Book
-// @Router /api/v1/books [get]
+// @Router /books [get]
 func GetAllBooks(c *gin.Context) {
 	var books []models.Book
 
@@ -54,7 +54,7 @@ func GetAllBooks(c *gin.Context) {
 // @Produce json
 // @Param id path int true "Book ID"
 // @Success 200 {object} models.Book
-// @Router /api/v1/books/{id} [get]
+// @Router /books{id} [get]
 func GetBook(c *gin.Context) {
 	id := c.Param("id")
 	var book models.Book
@@ -75,7 +75,7 @@ func GetBook(c *gin.Context) {
 // @Param id path int true "Book ID"
 // @Param book body models.Book true "Updated book object"
 // @Success 200 {object} models.Book
-// @Router /api/v1/books/{id} [put]
+// @Router /books{id} [put]
 func UpdateBook(c *gin.Context) {
 	id := c.Param("id")
 	var book models.Book
@@ -98,8 +98,8 @@ func UpdateBook(c *gin.Context) {
 // @Description Delete a book by ID
 // @Tags Books
 // @Param id path int true "Book ID"
-// @Success 200 {object} gin.H
-// @Router /api/v1/books/{id} [delete]
+// @Success 200 {object} map[string]interface{}
+// @Router /books{id} [delete]
 func DeleteBook(c *gin.Context) {
 	id := c.Param("id")
 	var book models.Book
@@ -110,5 +110,5 @@ func DeleteBook(c *gin.Context) {
 	}
 
 	db.Delete(&book)
-	c.JSON(http.StatusOK, gin.H{"msg": "Book deleted"})
+	c.JSON(http.StatusOK, map[string]interface{}{"msg": "Deleted successfully"})
 }

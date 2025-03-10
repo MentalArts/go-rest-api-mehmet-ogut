@@ -9,8 +9,8 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 
-	"github.com/swaggo/files"
-	"github.com/swaggo/gin-swagger"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 
 	_ "mentalartsapi/docs"
 )
@@ -34,26 +34,30 @@ func main() {
 
 	router := gin.Default()
 
+	// ✅ **Swagger UI'yi aktif et**
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	router.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{"message": "pong"})
-	})
+	// ✅ **TÜM ROUTE'LARI `/api/v1` ALTINA GRUPLADIK**
+	api := router.Group("/api/v1")
+	{
+		// **Authors**
+		api.POST("/authors", handlers.CreateAuthor)
+		api.GET("/authors", handlers.GetAllAuthors)
+		api.GET("/authors/:id", handlers.GetAuthor)
+		api.PUT("/authors/:id", handlers.UpdateAuthor)
+		api.DELETE("/authors/:id", handlers.DeleteAuthor)
 
-	router.POST("/api/v1/authors", handlers.CreateAuthor)
-	router.GET("/api/v1/authors", handlers.GetAllAuthors)
-	router.GET("/api/v1/authors/:id", handlers.GetAuthor)
-	router.PUT("/api/v1/authors/:id", handlers.UpdateAuthor)
-	router.DELETE("/api/v1/authors/:id", handlers.DeleteAuthor)
+		// **Books**
+		api.POST("/books", handlers.CreateBook)
+		api.GET("/books", handlers.GetAllBooks)
+		api.GET("/books/:id", handlers.GetBook)
+		api.PUT("/books/:id", handlers.UpdateBook)
+		api.DELETE("/books/:id", handlers.DeleteBook)
 
-	router.POST("/api/v1/books", handlers.CreateBook)
-	router.GET("/api/v1/books", handlers.GetAllBooks)
-	router.GET("/api/v1/books/:id", handlers.GetBook)
-	router.PUT("/api/v1/books/:id", handlers.UpdateBook)
-	router.DELETE("/api/v1/books/:id", handlers.DeleteBook)
-
-	router.GET("/api/v1/books/:id/reviews", handlers.GetReviews)
-	router.POST("/api/v1/books/:id/reviews", handlers.CreateReview)
+		// **Reviews**
+		api.GET("/books/:id/reviews", handlers.GetReviews)
+		api.POST("/books/:id/reviews", handlers.CreateReview)
+	}
 
 	log.Println("🚀 Server listening on port 8000...")
 	router.Run(":8000")
