@@ -34,10 +34,10 @@ func main() {
 
 	router := gin.Default()
 
-	// ✅ **Swagger UI'yi aktif et**
+	
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	// ✅ **TÜM ROUTE'LARI `/api/v1` ALTINA GRUPLADIK**
+	
 	api := router.Group("/api/v1")
 	{
 		// **Authors**
@@ -59,6 +59,6 @@ func main() {
 		api.POST("/books/:id/reviews", handlers.CreateReview)
 	}
 
-	log.Println("🚀 Server listening on port 8000...")
+	log.Println(" Server listening on port 8000...")
 	router.Run(":8000")
 }
